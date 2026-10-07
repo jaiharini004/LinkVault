@@ -21,5 +21,9 @@ def create_app(config_class='config.Config'):
     with app.app_context():
         # Auto-create tables for local development
         db.create_all()
+
+    @app.route('/')
+    def index():
+        return {"success": True, "message": "Welcome to LinkVault API. The backend is running successfully!"}, 200
         
     return app
