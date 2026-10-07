@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  title: LinkVault API
+  description: API documentation for the LinkVault Short URL & Intelligence Engine
+  version: 1.0.0
+paths:
+  /api/links/preview:
+    post:
+      summary: Extract metadata and suggest category for a URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: "https://github.com/example/repo"
+      responses:
+        '200':
+          description: Metadata successfully extracted
+        '400':
+          description: Validation error or SSRF block
+  /api/links/{link_id}/shorten:
+    post:
+      summary: Generate a short code or assign a custom alias
+      parameters:
+        - in: path
+          name: link_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                custom_alias:
+                  type: string
+                  example: "agentic-ai"
+      responses:
+        '201':
+          description: Short URL created successfully
+        '400':
+          description: Invalid alias or validation failure
+  /r/{short_code}:
+    get:
+      summary: Redirect to original URL
+      parameters:
+        - in: path
+          name: short_code
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirects to original URL
+        '404':
+          description: Short URL not found
+  /api/links/{link_id}/analytics:
+    get:
+      summary: Retrieve click statistics for a short URL
+      parameters:
+        - in: path
+          name: link_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Analytics retrieved successfully
+        '404':
+          description: Link or analytics not found
+  /api/links/search:
+    get:
+      summary: Multi-criteria search and dynamic filtering
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+        - in: query
+          name: category_id
+          schema:
+            type: integer
+        - in: query
+          name: source
+          schema:
+            type: string
+        - in: query
+          name: health
+          schema:
+            type: string
+        - in: query
+          name: inbox
+          schema:
+            type: boolean
+        - in: query
+          name: favorite
+          schema:
+            type: boolean
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Search results returned successfully

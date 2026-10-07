@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+flask-migrate
+python-dotenv
+requests
+beautifulsoup4
